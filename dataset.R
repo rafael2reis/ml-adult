@@ -3,10 +3,14 @@ adult.test <- NULL
 colnames <- NULL
 outcome <- NULL
 
-LoadAdultDataset <- function() {
+LoadAdultDataset <- function(asStrings = FALSE) {
   nas <- c(" ?", "?", "? ")
   
-  adult <<- read.csv("adult.data.csv", header = FALSE, na.strings = nas)
+  if (asStrings) {
+    adult <<- read.csv("adult.data.csv", header = FALSE, stringsAsFactors = FALSE)
+  } else {
+    adult <<- read.csv("adult.data.csv", header = FALSE, na.strings = nas)
+  }
   colnames <<- c("age",
                 "workclass",
                 "fnlwgt",
@@ -25,7 +29,11 @@ LoadAdultDataset <- function() {
   names(adult) <<- colnames
   
   # De teste
-  adult.test <<- read.csv("adult.test.csv", header = FALSE, na.strings = nas)
+  if (asStrings) {
+    adult.test <<- read.csv("adult.test.csv", header = FALSE, stringsAsFactors = FALSE)
+  } else {
+    adult.test <<- read.csv("adult.test.csv", header = FALSE, na.strings = nas)
+  }
   names(adult.test) <<- colnames
   
   outcome <<- 'over50K'
