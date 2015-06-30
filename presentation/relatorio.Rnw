@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[backend=bibtex, sorting=none]{biblatex}
+\bibliography{references}
+
+<<setup, include=FALSE, cache=FALSE, echo=FALSE>>=
+Sys.setenv(TEXINPUTS=getwd(),
+           BIBINPUTS=getwd(),
+           BSTINPUTS=getwd())
+@
+
+\sloppy
+
+\title{Análise de Vegetação Secundária\\ na Amazônia Legal\\ 2008 - 2012}
+\author{Luis Felipe Müller\\ Rafael dos Reis Silva }
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\maketitle
+
+\begin{abstract}
+Este trabalho tem como objetivo melhorar a acurácia de um classificador binário de renda para o \emph{Adult Data Set}. Foram utilizados alguns modelos de aprendizado de máquina gerados a partir de diferentes algoritmos. Aqueles baseados em árvore de decisão foram os que obtiveram os melhores resultados, atingindo uma acurácia de mais de 99%.
+\end{abstract}
+
+\section{Introdução}
+
+Classificadores binários são modelos clássicos de aprendizado de máquina. Um exemplo é a tarefa de classficar uma mensagem como \emph{spam} ou não-\emph{spam}. Esses problemas pertecem à categoria de aprendizado \emph{supervisionado}, que consiste em predizer, ou estimar, uma \emph{saída} baseado e um ou mais \emph{entradas} \cite{James:2014:ISL:2517747}.
+
+O \emph{Adult Data Set} é uma base de dados do \emph{UCI Machine Learning Repository} \cite{Lichman:2013}, cuja tarefa associada é uma classficação binária: a partir de dados do censo americano de 1994, predizer se uma pessoa possui renda maior do que $50K ao ano. O \emph{data set} foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
+
+\section{Preparação dos Dados}
+
+\begin{tabular}{|l|l|c|l|}
+\hline
+Origem & Tipo de & Sensor & Resolução \\
+ & Satélite & & \\
+\hline
+PRODES & Landsat 5 & TM & 20 a 30m \\
+\hline
+TerraClass & Landsat 5 & TM & 20 a 30m \\
+\hline
+GFW & Landsat 7 & ETM+ & 30 x 30m \\
+\hline
+\end{tabular}
+
+\printbibliography
+
+\end{document}
