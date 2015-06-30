@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[backend=bibtex, sorting=none]{biblatex}
+\usepackage{hyperref}
 \bibliography{references}
 
 <<setup, include=FALSE, cache=FALSE, echo=FALSE>>=
@@ -13,8 +14,9 @@ Sys.setenv(TEXINPUTS=getwd(),
 
 \sloppy
 
-\title{Análise de Vegetação Secundária\\ na Amazônia Legal\\ 2008 - 2012}
-\author{Luis Felipe Müller\\ Rafael dos Reis Silva }
+\title{Um Classificador de Renda\\ para o Adult Data Set}
+\author{Luis Felipe Müller \\ \texttt{lhenriques@inf.puc-rio.br}
+  \and Rafael dos Reis Silva \\ \texttt{rrsilva@inf.puc-rio.br}}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -27,24 +29,171 @@ Este trabalho tem como objetivo melhorar a acurácia de um classificador binári
 
 \section{Introdução}
 
-Classificadores binários são modelos clássicos de aprendizado de máquina. Um exemplo é a tarefa de classficar uma mensagem como \emph{spam} ou não-\emph{spam}. Esses problemas pertecem à categoria de aprendizado \emph{supervisionado}, que consiste em predizer, ou estimar, uma \emph{saída} baseado e um ou mais \emph{entradas} \cite{James:2014:ISL:2517747}.
+Classificadores binários são modelos clássicos de aprendizado de máquina. Um exemplo é a tarefa de classficar uma mensagem como \emph{spam} ou não-\emph{spam}. Esses problemas pertecem à categoria de aprendizado \emph{supervisionado}, que consiste em predizer, ou estimar, uma \emph{saída} baseada e uma ou mais \emph{entradas} \cite{James:2014:ISL:2517747}.
 
-O \emph{Adult Data Set} é uma base de dados do \emph{UCI Machine Learning Repository} \cite{Lichman:2013}, cuja tarefa associada é uma classficação binária: a partir de dados do censo americano de 1994, predizer se uma pessoa possui renda maior do que $50K ao ano. O \emph{data set} foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
+\section{Base de Dados e Tarefa}
+
+O \emph{Adult Data Set} \cite{adultwebsite} é uma base de dados do \emph{UCI Machine Learning Repository} \cite{Lichman:2013}, gerada a partir de dados do censo americano de 1994. O \emph{data set} possui 15 atributos, sendo 9 categóricos e 6 numéricos, como idade, educação, estado civil, dentre outros. São disponibilizados 2 arquivos, um para o conjunto de treino (com 32.561 registros) e o outro de teste (com 16.281).
+
+A tarefa associada a esta base é uma classficação binária: predizer se uma pessoa possui renda maior do que \$50K ao ano. O atributo \emph{over50K} contém essa informação: ele possui valor ``>50K''  se a pessoa apresenta renda maior do que \$50K ou ``<=50K''  caso contrário.
+
+O \emph{data set} foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
 
 \section{Preparação dos Dados}
 
-\begin{tabular}{|l|l|c|l|}
+Os arquivos com os dados foram tratados ...
+
+\section{Classificadores}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-Origem & Tipo de & Sensor & Resolução \\
- & Satélite & & \\
+TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-PRODES & Landsat 5 & TM & 20 a 30m \\
+0.935 & 0.482 & 0.859 & 0.935 & 0.896 & 0.893 & <=50K \\
 \hline
-TerraClass & Landsat 5 & TM & 20 a 30m \\
-\hline
-GFW & Landsat 7 & ETM+ & 30 x 30m \\
+0.518 & 0.065 & 0.716 & 0.518 & 0.601 & 0.893 & >50K \\
 \hline
 \end{tabular}
+\caption{Resultados por Classe: Naive Bayes}
+\label{table:1}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+a & b & $\leftarrow$ classified as \\
+\hline
+23112 & 1608 & a = <=50K \\
+\hline
+3782 & 4059 & b = >50K \\
+\hline
+\end{tabular}
+\caption{Matrix de Confusão Naive Bayes}
+\label{table:2}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
+\hline
+0.932 & 0.339 & 0.897 & 0.932 & 0.914 & 0.921 & <=50K \\
+\hline
+0.661 & 0.068 & 0.755 & 0.661 & 0.705 & 0.921 & >50K \\
+\hline
+\end{tabular}
+\caption{Resultados por Classe: NBTree}
+\label{table:3}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ a & b & $\leftarrow$ classified as \\
+ \hline
+ 23037 & 1683 & a = <=50K \\
+ \hline
+ 2658 & 5183 & b = >50K \\
+ \hline
+\end{tabular}
+\caption{Matrix de Confusão NBTree}
+\label{table:4}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
+\hline
+ 0.999 & 0.006 & 0.998 & 0.999 & 0.999 & 1 & <=50K \\
+ \hline
+ 0.994 & 0.001 & 0.997 & 0.994 & 0.996 & 1 & >50K \\
+\hline
+\end{tabular}
+\caption{Resultados por Classe: Random Tree}
+\label{table:5}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ a & b & $\leftarrow$ classified as \\
+ \hline
+24697 & 23 & a = <=50K \\
+\hline
+46 & 7795 & b = >50K \\
+ \hline
+\end{tabular}
+\caption{Matrix de Confusão Random Tree}
+\label{table:6}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
+\hline
+1 & 0.006 & 0.998 & 1 & 0.999 & 1 & <=50K \\
+\hline
+0.994 & 0 & 1 & 0.994 & 0.997 & 1 & >50K \\
+\hline
+\end{tabular}
+\caption{Resultados por Classe: Random Forest}
+\label{table:7}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ a & b & $\leftarrow$ classified as \\
+ \hline
+24717 & 3 & a = <=50K \\
+\hline
+44 & 7797 & b = >50K \\
+ \hline
+\end{tabular}
+\caption{Matrix de Confusão Random Forest}
+\label{table:8}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
+\hline
+1 & 0.002 & 0.999 & 1 & 1 & 1 & <=50K \\
+\hline
+0.998 & 0 & 1 & 0.998 & 0.999 & 1 & >50K \\
+\hline
+\end{tabular}
+\caption{Resultados por Classe: Random Committee}
+\label{table:9}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ a & b & $\leftarrow$ classified as \\
+ \hline
+24719 & 1 & a = <=50K \\
+\hline
+18 & 7823 & b = >50K \\
+ \hline
+\end{tabular}
+\caption{Matrix de Confusão Random Committee}
+\label{table:10}
+\end{table}
 
 \printbibliography
 
