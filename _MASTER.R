@@ -1,5 +1,10 @@
 rm(list = ls())
 
+setwd('/Users/rafaelreis/workspace/r/MachineLearning')
+
+# Create file system structure
+dir.create('data')
+
 # Load the Dataset asStrings
 source("dataset.R")
 LoadAdultDataset(asStrings = TRUE)

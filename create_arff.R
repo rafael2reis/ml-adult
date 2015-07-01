@@ -50,6 +50,6 @@ CreateArff <- function(train = NULL, test = NULL, relation = NULL) {
   
   # Write in test file
   test.arff <- file( paste0(relation, ".test.arff") )
-  writeLines(lines, test.arff)
+  writeLines(lines.test, test.arff)
   close(test.arff)
 }
