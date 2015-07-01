@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[backend=bibtex, sorting=none]{biblatex}
 \usepackage{hyperref}
+\usepackage{mathtools}
 \bibliography{references}
 
 <<setup, include=FALSE, cache=FALSE, echo=FALSE>>=
@@ -24,20 +25,45 @@ Sys.setenv(TEXINPUTS=getwd(),
 \maketitle
 
 \begin{abstract}
-Este trabalho tem como objetivo melhorar a acurácia de um classificador binário de renda para o \emph{Adult Data Set}. Foram utilizados alguns modelos de aprendizado de máquina gerados a partir de diferentes algoritmos. Aqueles baseados em árvore de decisão foram os que obtiveram os melhores resultados, atingindo uma acurácia de mais de 99%.
+Este trabalho tem como objetivo construir um classificador binário de renda para o Adult Data Set, cuja acurácia seja melhor do que melhor já encontrada na literatura (85.9\%). Foram gerados alguns modelos de aprendizado de máquina a partir de diferentes algoritmos. Aqueles baseados em árvores de decisão obtiveram os melhores resultados, atingindo uma acurácia de mais de 99\%.
 \end{abstract}
 
 \section{Introdução}
 
 Classificadores binários são modelos clássicos de aprendizado de máquina. Um exemplo é a tarefa de classficar uma mensagem como \emph{spam} ou não-\emph{spam}. Esses problemas pertecem à categoria de aprendizado \emph{supervisionado}, que consiste em predizer, ou estimar, uma \emph{saída} baseada e uma ou mais \emph{entradas} \cite{James:2014:ISL:2517747}.
 
-\section{Base de Dados e Tarefa}
+\section{Base de Dados}
 
-O \emph{Adult Data Set} \cite{adultwebsite} é uma base de dados do \emph{UCI Machine Learning Repository} \cite{Lichman:2013}, gerada a partir de dados do censo americano de 1994. O \emph{data set} possui 15 atributos, sendo 9 categóricos e 6 numéricos, como idade, educação, estado civil, dentre outros. São disponibilizados 2 arquivos, um para o conjunto de treino (com 32.561 registros) e o outro de teste (com 16.281).
+O Adult Data Set \cite{adultwebsite} é uma base de dados do UCI Machine Learning Repository \cite{Lichman:2013}, gerada a partir de dados do censo americano de 1994. O \emph{data set} possui 15 atributos, sendo 9 categóricos e 6 numéricos, como idade, educação, estado civil, dentre outros. São disponibilizados 2 arquivos, um para o conjunto de treino (com 32.561 registros) e o outro de teste (com 16.281).
+
+O \emph{data set} foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
+
+\section{Tarefa}
 
 A tarefa associada a esta base é uma classficação binária: predizer se uma pessoa possui renda maior do que \$50K ao ano. O atributo \emph{over50K} contém essa informação: ele possui valor ``>50K''  se a pessoa apresenta renda maior do que \$50K ou ``<=50K''  caso contrário.
 
-O \emph{data set} foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
+No conjunto de treino, 76.07\% dos registros estão classificados como ``>50K'', que será utilizado como \emph{baseline} estatístico. Junto com as melhores acurácias encontradas na literatura para esta tarefa \cite{kohavi1996scaling}, temos a seguinte tabela:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+Algo & Acurácia (\%) \\
+\hline
+NBTree & 85.90 \\
+\hline
+Decision Tree & 84.46 \\
+\hline
+Naive Bayes & 83.88 \\
+\hline
+\emph{Baseline} estatístico & 76.07 \\
+\hline
+\end{tabular}
+\caption{Acurácia para a tarefa do Adult Data Set}
+\label{table:acuracia}
+\end{table}
+
+O objetivo deste trabalho é atingir uma acurácia melhor do que as apresentadas.
 
 \section{Preparação dos Dados}
 
@@ -45,15 +71,33 @@ Os arquivos com os dados foram tratados ...
 
 \section{Classificadores}
 
+Foram utilizados cinco classificadores: Naive Bayes, NBTree, RandomTree, RandomForest e RandomCommittee. Os dois primeiros foram construídos apenas com fins ilustrativos, a fim de atingir os resultados já apresentados na literatura. Os três últimos tiveram como objetivo melhorar a melhor acurácia registrada até então para o \emph{Adult Data Set}. A seguir, uma descrição de cada algoritmo.
+
+\subsection{Naive Bayes}
+
+O classificador Naive Bayes é baseado na suposição de que os valores dos atributos de entrada são condicionalmente independentes do valor da saída \cite{michalski2013machine}. A classificação é dada pela fórmula:
+
+$$v_{NB} = \text{argmax}_{v_j \in V} P(v_j) \prod_i P(a_i|v_j)$$
+
+Onde os diversos valores de $P(v_j)$ e $P(a_i|v_j)$ são estimados utilizando-se o conjunto de treino.
+
+\subsection{NBTree}
+
+NBTree é um algoritmo proposto em \cite{kohavi1996scaling}, que é um híbrido entre as árvores de decisão e o Naive Bayes: os nós da árvore de decisão contêm partições univariadas como os das árvores de decisão ordinárias, mas as folhas contêm classificadores Naive Bayes.
+
+Especialmente, em bases de dados maiores, os resultados do NBTree são melhores do que os da árvores de decisão e do Naive Bayes \cite{kohavi1996scaling}.
+
+\subsection{Random Tree}
+
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-0.935 & 0.482 & 0.859 & 0.935 & 0.896 & 0.893 & <=50K \\
+0.935 & 0.489 & 0.859 & 0.935 & 0.895 & 0.889 & <=50K \\
 \hline
-0.518 & 0.065 & 0.716 & 0.518 & 0.601 & 0.893 & >50K \\
+0.511 & 0.065 & 0.712 & 0.511 & 0.595 & 0.889 & >50K \\
 \hline
 \end{tabular}
 \caption{Resultados por Classe: Naive Bayes}
@@ -66,9 +110,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
 a & b & $\leftarrow$ classified as \\
 \hline
-23112 & 1608 & a = <=50K \\
+11579 & 805 & a = <=50K \\
 \hline
-3782 & 4059 & b = >50K \\
+1905 & 1992 & b = >50K \\
 \hline
 \end{tabular}
 \caption{Matrix de Confusão Naive Bayes}
@@ -81,9 +125,9 @@ a & b & $\leftarrow$ classified as \\
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-0.932 & 0.339 & 0.897 & 0.932 & 0.914 & 0.921 & <=50K \\
+0.933 & 0.342 & 0.897 & 0.933 & 0.914 & 0.919 & <=50K \\
 \hline
-0.661 & 0.068 & 0.755 & 0.661 & 0.705 & 0.921 & >50K \\
+0.658 & 0.067 & 0.756 & 0.658 & 0.703 & 0.919 & >50K \\
 \hline
 \end{tabular}
 \caption{Resultados por Classe: NBTree}
@@ -96,9 +140,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
  a & b & $\leftarrow$ classified as \\
  \hline
- 23037 & 1683 & a = <=50K \\
- \hline
- 2658 & 5183 & b = >50K \\
+11555 & 829 & a = <=50K \\
+\hline
+1334 & 2563 & b = >50K \\
  \hline
 \end{tabular}
 \caption{Matrix de Confusão NBTree}
@@ -111,9 +155,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
- 0.999 & 0.006 & 0.998 & 0.999 & 0.999 & 1 & <=50K \\
- \hline
- 0.994 & 0.001 & 0.997 & 0.994 & 0.996 & 1 & >50K \\
+0.999 & 0.007 & 0.998 & 0.999 & 0.999 & 1 & <=50K
+\hline
+0.993 & 0.001 & 0.998 & 0.993 & 0.995 & 1 & >50K
 \hline
 \end{tabular}
 \caption{Resultados por Classe: Random Tree}
@@ -126,9 +170,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
  a & b & $\leftarrow$ classified as \\
  \hline
-24697 & 23 & a = <=50K \\
-\hline
-46 & 7795 & b = >50K \\
+ 12376 & 8 & a = <=50K \\
+ \hline
+ 28 & 3869 & b = >50K \\
  \hline
 \end{tabular}
 \caption{Matrix de Confusão Random Tree}
@@ -141,9 +185,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-1 & 0.006 & 0.998 & 1 & 0.999 & 1 & <=50K \\
+1 & 0.007 & 0.998 & 1 & 0.999 & 1 & <=50K \\
 \hline
-0.994 & 0 & 1 & 0.994 & 0.997 & 1 & >50K \\
+0.993 & 0 & 0.999 & 0.993 & 0.996 & 1 & >50K \\
 \hline
 \end{tabular}
 \caption{Resultados por Classe: Random Forest}
@@ -156,9 +200,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
  a & b & $\leftarrow$ classified as \\
  \hline
-24717 & 3 & a = <=50K \\
+12382 & 2 & a = <=50K \\
 \hline
-44 & 7797 & b = >50K \\
+28 & 3869 & b = >50K \\
  \hline
 \end{tabular}
 \caption{Matrix de Confusão Random Forest}
@@ -184,15 +228,38 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
- a & b & $\leftarrow$ classified as \\
- \hline
-24719 & 1 & a = <=50K \\
+a & b & $\leftarrow$ classified as \\
 \hline
-18 & 7823 & b = >50K \\
- \hline
+12384 & 0 & a = <=50K \\
+\hline
+9 & 3888 & b = >50K \\
+\hline
 \end{tabular}
 \caption{Matrix de Confusão Random Committee}
 \label{table:10}
+\end{table}
+
+\section{Conclusão}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+ Algo & Acurácia(\%) \\
+\hline
+Naive Bayes & 83.3548 \\
+\hline
+NBTree & 86.7146 \\
+\hline
+Random Tree & 99.7789 \\
+\hline
+Random Forest & 99.8157 \\
+\hline
+Random Committee & 99.9447 \\
+ \hline
+\end{tabular}
+\caption{Matrix de Confusão Random Committee}
+\label{table:resultados}
 \end{table}
 
 \printbibliography
