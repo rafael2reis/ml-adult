@@ -83,11 +83,25 @@ Onde os diversos valores de $P(v_j)$ e $P(a_i|v_j)$ são estimados utilizando-se
 
 \subsection{NBTree}
 
-NBTree é um algoritmo proposto em \cite{kohavi1996scaling}, que é um híbrido entre as árvores de decisão e o Naive Bayes: os nós da árvore de decisão contêm partições univariadas como os das árvores de decisão ordinárias, mas as folhas contêm classificadores Naive Bayes.
+NBTree foi proposto em \cite{kohavi1996scaling} e é um híbrido entre as árvores de decisão e o Naive Bayes: os nós da árvore de decisão contêm partições univariadas como os das árvores de decisão ordinárias, mas as folhas contêm classificadores Naive Bayes.
 
 Especialmente, em bases de dados maiores, os resultados do NBTree são melhores do que os da árvores de decisão e do Naive Bayes \cite{kohavi1996scaling}.
 
 \subsection{Random Tree}
+
+Random Tree é uma variante da árvore de decisão, na qual o particionamento de cada nó é escolhido aleatoriamente de um total de $K$ melhores particionamentos \cite{dietterich2000experimental}.
+
+\subsection{Random Forest}
+
+\cite{breiman2001random}
+
+\subsection{Random Committee}
+
+A ideia do Ramdom Committee é bastante simples: ele constrói um comitê de classificadores base e calcula a média das suas predições. Cada classificador é baseado no mesmo conjunto de dados, mas utiliza uma semente diferente para a geração de números aleatórios. Isso só faz sentido quando o classificador base é de natureza aleatória \cite{witten2005data}. Neste trabalho, o classificador base utilizado foi o Random Tree.
+
+\section{Resultados}
+
+Para gerar os resultados, foi utilizado o framework para aprendizado de máquina Weka. Os modelos foram construídos e validados utilizando-se, respectivamente, o conjunto de treino e o de teste fornecidos em 
 
 \begin{table}[h]
 \centering
@@ -155,9 +169,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-0.999 & 0.007 & 0.998 & 0.999 & 0.999 & 1 & <=50K
+0.999 & 0.007 & 0.998 & 0.999 & 0.999 & 1 & <=50K \\
 \hline
-0.993 & 0.001 & 0.998 & 0.993 & 0.995 & 1 & >50K
+0.993 & 0.001 & 0.998 & 0.993 & 0.995 & 1 & >50K \\
 \hline
 \end{tabular}
 \caption{Resultados por Classe: Random Tree}
