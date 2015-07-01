@@ -33815,30 +33815,30 @@ maritalstatus = Widowed
 
 Size of the tree : 33786
 
-Time taken to build model: 0.57 seconds
+Time taken to build model: 0.4 seconds
 
 === Evaluation on test set ===
 === Summary ===
 
-Correctly Classified Instances       32492               99.7881 %
-Incorrectly Classified Instances        69                0.2119 %
-Kappa statistic                          0.9942
+Correctly Classified Instances       16245               99.7789 %
+Incorrectly Classified Instances        36                0.2211 %
+Kappa statistic                          0.9939
 Mean absolute error                      0.0079
-Root mean squared error                  0.0459
-Relative absolute error                  2.1473 %
-Root relative squared error             10.7269 %
-Total Number of Instances            32561     
+Root mean squared error                  0.0464
+Relative absolute error                  2.1588 %
+Root relative squared error             10.8767 %
+Total Number of Instances            16281     
 
 === Detailed Accuracy By Class ===
 
                TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
-                 0.999     0.006      0.998     0.999     0.999      1        <=50K
-                 0.994     0.001      0.997     0.994     0.996      1        >50K
-Weighted Avg.    0.998     0.005      0.998     0.998     0.998      1    
+                 0.999     0.007      0.998     0.999     0.999      1        <=50K
+                 0.993     0.001      0.998     0.993     0.995      1        >50K
+Weighted Avg.    0.998     0.006      0.998     0.998     0.998      1    
 
 === Confusion Matrix ===
 
      a     b   <-- classified as
- 24697    23 |     a = <=50K
-    46  7795 |     b = >50K
+ 12376     8 |     a = <=50K
+    28  3869 |     b = >50K
 

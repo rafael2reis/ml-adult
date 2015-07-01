@@ -198,25 +198,25 @@ Time taken to build model: 0.15 seconds
 === Evaluation on test set ===
 === Summary ===
 
-Correctly Classified Instances       27171               83.4465 %
-Incorrectly Classified Instances      5390               16.5535 %
-Kappa statistic                          0.4999
-Mean absolute error                      0.1733
-Root mean squared error                  0.3721
-Relative absolute error                 47.396  %
-Root relative squared error             87.0263 %
-Total Number of Instances            32561     
+Correctly Classified Instances       13571               83.3548 %
+Incorrectly Classified Instances      2710               16.6452 %
+Kappa statistic                          0.4939
+Mean absolute error                      0.1748
+Root mean squared error                  0.3741
+Relative absolute error                 47.9149 %
+Root relative squared error             87.6728 %
+Total Number of Instances            16281     
 
 === Detailed Accuracy By Class ===
 
                TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
-                 0.935     0.482      0.859     0.935     0.896      0.893    <=50K
-                 0.518     0.065      0.716     0.518     0.601      0.893    >50K
-Weighted Avg.    0.834     0.382      0.825     0.834     0.825      0.893
+                 0.935     0.489      0.859     0.935     0.895      0.889    <=50K
+                 0.511     0.065      0.712     0.511     0.595      0.889    >50K
+Weighted Avg.    0.834     0.387      0.824     0.834     0.823      0.889
 
 === Confusion Matrix ===
 
      a     b   <-- classified as
- 23112  1608 |     a = <=50K
-  3782  4059 |     b = >50K
+ 11579   805 |     a = <=50K
+  1905  1992 |     b = >50K
 

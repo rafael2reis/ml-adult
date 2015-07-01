@@ -33526,30 +33526,30 @@ Number of Leaves  : 	210
 Size of the tree : 	242
 
 
-Time taken to build model: 20.03 seconds
+Time taken to build model: 19.13 seconds
 
 === Evaluation on test set ===
 === Summary ===
 
-Correctly Classified Instances       28220               86.6681 %
-Incorrectly Classified Instances      4341               13.3319 %
-Kappa statistic                          0.6192
-Mean absolute error                      0.1557
-Root mean squared error                  0.3152
-Relative absolute error                 42.5755 %
-Root relative squared error             73.7263 %
-Total Number of Instances            32561     
+Correctly Classified Instances       14118               86.7146 %
+Incorrectly Classified Instances      2163               13.2854 %
+Kappa statistic                          0.6182
+Mean absolute error                      0.1565
+Root mean squared error                  0.3155
+Relative absolute error                 42.8944 %
+Root relative squared error             73.9521 %
+Total Number of Instances            16281     
 
 === Detailed Accuracy By Class ===
 
                TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
-                 0.932     0.339      0.897     0.932     0.914      0.921    <=50K
-                 0.661     0.068      0.755     0.661     0.705      0.921    >50K
-Weighted Avg.    0.867     0.274      0.862     0.867     0.864      0.921
+                 0.933     0.342      0.897     0.933     0.914      0.919    <=50K
+                 0.658     0.067      0.756     0.658     0.703      0.919    >50K
+Weighted Avg.    0.867     0.276      0.863     0.867     0.864      0.919
 
 === Confusion Matrix ===
 
      a     b   <-- classified as
- 23037  1683 |     a = <=50K
-  2658  5183 |     b = >50K
+ 11555   829 |     a = <=50K
+  1334  2563 |     b = >50K
 

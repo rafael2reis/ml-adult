@@ -28,30 +28,30 @@ Out of bag error: 0.1502
 
 
 
-Time taken to build model: 22.36 seconds
+Time taken to build model: 23.31 seconds
 
 === Evaluation on test set ===
 === Summary ===
 
-Correctly Classified Instances       32514               99.8557 %
-Incorrectly Classified Instances        47                0.1443 %
-Kappa statistic                          0.996 
-Mean absolute error                      0.075 
-Root mean squared error                  0.1267
-Relative absolute error                 20.4991 %
-Root relative squared error             29.6433 %
-Total Number of Instances            32561     
+Correctly Classified Instances       16251               99.8157 %
+Incorrectly Classified Instances        30                0.1843 %
+Kappa statistic                          0.9949
+Mean absolute error                      0.0754
+Root mean squared error                  0.1276
+Relative absolute error                 20.6682 %
+Root relative squared error             29.9086 %
+Total Number of Instances            16281     
 
 === Detailed Accuracy By Class ===
 
                TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
-                 1         0.006      0.998     1         0.999      1        <=50K
-                 0.994     0          1         0.994     0.997      1        >50K
-Weighted Avg.    0.999     0.004      0.999     0.999     0.999      1    
+                 1         0.007      0.998     1         0.999      1        <=50K
+                 0.993     0          0.999     0.993     0.996      1        >50K
+Weighted Avg.    0.998     0.006      0.998     0.998     0.998      1    
 
 === Confusion Matrix ===
 
      a     b   <-- classified as
- 24717     3 |     a = <=50K
-    44  7797 |     b = >50K
+ 12382     2 |     a = <=50K
+    28  3869 |     b = >50K
 
