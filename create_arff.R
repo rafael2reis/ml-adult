@@ -39,7 +39,7 @@ CreateArff <- function(train = NULL, test = NULL, relation = NULL) {
   
   # Create Test file
   for (i in 1:nrow(test)) {
-    lines.test[index.test] <- c( paste0(train[i, ], collapse = ',') )
+    lines.test[index.test] <- c( paste0(test[i, ], collapse = ',') )
     index.test <- index.test + 1
   }
   
