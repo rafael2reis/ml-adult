@@ -9,9 +9,23 @@ dir.create('data')
 source("dataset.R")
 LoadAdultDataset(asStrings = TRUE)
 
+source("code/feature.R")
+CreateFeatures(dataset = adult, label = "adult")
+CreateFeatures(dataset = adult.test, label = "adult-test")
+
+features <- read.csv("adult-features.csv", header = FALSE, 
+                               stringsAsFactors = FALSE,
+                               strip.white = TRUE)
+features.test <- read.csv("adult-test-features.csv", header = FALSE, 
+                                    stringsAsFactors = FALSE,
+                                    strip.white = TRUE)
+
+adult <- cbind(adult, features)
+adult.test <- cbind(adult.test, features.test)
+
 # Create de .ARFF files to be loaded in Weka
 source("create_arff.R")
-CreateArff(train = adult, test = adult.test, relation = 'adult')
+CreateArff(train = adult, test = adult.test, relation = 'adultf')
 
 # Parse the Weka Ouput:
 source("code/parse_output.R")
