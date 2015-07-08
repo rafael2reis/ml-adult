@@ -1,20 +1,20 @@
 @RELATION adult
 
 @ATTRIBUTE age NUMERIC
-@ATTRIBUTE workclass {State-gov,Self-emp-not-inc,Private,Federal-gov,Local-gov,Self-emp-inc,Without-pay, Private, Local-gov, Self-emp-not-inc, Federal-gov, State-gov, Self-emp-inc, Without-pay}
+@ATTRIBUTE workclass {State-gov,Self-emp-not-inc,Private,Federal-gov,Local-gov,Self-emp-inc,Without-pay}
 @ATTRIBUTE fnlwgt NUMERIC
-@ATTRIBUTE education {Bachelors,HS-grad,11th,Masters,9th,Some-college,Assoc-acdm,7th-8th,Doctorate,Assoc-voc,Prof-school,5th-6th,10th,Preschool,12th,1st-4th, 11th, HS-grad, Assoc-acdm, Some-college, 10th, Prof-school, 7th-8th, Bachelors, Masters, 5th-6th, Assoc-voc, 9th, Doctorate, 12th, 1st-4th, Preschool}
+@ATTRIBUTE education {Bachelors,HS-grad,11th,Masters,9th,Some-college,Assoc-acdm,7th-8th,Doctorate,Assoc-voc,Prof-school,5th-6th,10th,Preschool,12th,1st-4th}
 @ATTRIBUTE educationnum NUMERIC
-@ATTRIBUTE maritalstatus {Never-married,Married-civ-spouse,Divorced,Married-spouse-absent,Separated,Married-AF-spouse,Widowed, Never-married, Married-civ-spouse, Widowed, Separated, Divorced, Married-spouse-absent, Married-AF-spouse}
-@ATTRIBUTE occupation {Adm-clerical,Exec-managerial,Handlers-cleaners,Prof-specialty,Other-service,Sales,Transport-moving,Farming-fishing,Machine-op-inspct,Tech-support,Craft-repair,Protective-serv,Armed-Forces,Priv-house-serv, Machine-op-inspct, Farming-fishing, Protective-serv, Other-service, Prof-specialty, Craft-repair, Adm-clerical, Exec-managerial, Tech-support, Sales, Priv-house-serv, Transport-moving, Handlers-cleaners, Armed-Forces}
-@ATTRIBUTE relationship {Not-in-family,Husband,Wife,Own-child,Unmarried,Other-relative, Own-child, Husband, Not-in-family, Unmarried, Wife, Other-relative}
-@ATTRIBUTE race {White,Black,Asian-Pac-Islander,Amer-Indian-Eskimo,Other, Black, White, Other, Amer-Indian-Eskimo, Asian-Pac-Islander}
-@ATTRIBUTE sex {Male,Female, Male, Female}
+@ATTRIBUTE maritalstatus {Never-married,Married-civ-spouse,Divorced,Married-spouse-absent,Separated,Married-AF-spouse,Widowed}
+@ATTRIBUTE occupation {Adm-clerical,Exec-managerial,Handlers-cleaners,Prof-specialty,Other-service,Sales,Transport-moving,Farming-fishing,Machine-op-inspct,Tech-support,Craft-repair,Protective-serv,Armed-Forces,Priv-house-serv}
+@ATTRIBUTE relationship {Not-in-family,Husband,Wife,Own-child,Unmarried,Other-relative}
+@ATTRIBUTE race {White,Black,Asian-Pac-Islander,Amer-Indian-Eskimo,Other}
+@ATTRIBUTE sex {Male,Female}
 @ATTRIBUTE capitalgain NUMERIC
 @ATTRIBUTE capitalloss NUMERIC
 @ATTRIBUTE hoursperweek NUMERIC
-@ATTRIBUTE nativecountry {United-States,Cuba,Jamaica,India,Mexico,Puerto-Rico,Honduras,England,Canada,Germany,Iran,Philippines,Poland,Columbia,Cambodia,Thailand,Ecuador,Laos,Taiwan,Haiti,Portugal,Dominican-Republic,El-Salvador,France,Guatemala,Italy,China,South,Japan,Yugoslavia,Peru,Outlying-US(Guam-USVI-etc),Scotland,Trinadad&Tobago,Greece,Nicaragua,Vietnam,Hong,Ireland,Hungary,Holand-Netherlands, United-States, Peru, Guatemala, Mexico, Dominican-Republic, Ireland, Germany, Philippines, Thailand, Haiti, El-Salvador, Puerto-Rico, Vietnam, South, Columbia, Japan, India, Cambodia, Poland, Laos, England, Cuba, Taiwan, Italy, Canada, Portugal, China, Nicaragua, Honduras, Iran, Scotland, Jamaica, Ecuador, Yugoslavia, Hungary, Hong, Greece, Trinadad&Tobago, Outlying-US(Guam-USVI-etc), France}
-@ATTRIBUTE over50K {<=50K,>50K, <=50K, >50K}
+@ATTRIBUTE nativecountry {United-States,Cuba,Jamaica,India,Mexico,Puerto-Rico,Honduras,England,Canada,Germany,Iran,Philippines,Poland,Columbia,Cambodia,Thailand,Ecuador,Laos,Taiwan,Haiti,Portugal,Dominican-Republic,El-Salvador,France,Guatemala,Italy,China,South,Japan,Yugoslavia,Peru,Outlying-US(Guam-USVI-etc),Scotland,Trinadad&Tobago,Greece,Nicaragua,Vietnam,Hong,Ireland,Hungary,Holand-Netherlands}
+@ATTRIBUTE over50K {<=50K,>50K}
 
 @DATA
 39,State-gov,77516,Bachelors,13,Never-married,Adm-clerical,Not-in-family,White,Male,2174,0,40,United-States,<=50K

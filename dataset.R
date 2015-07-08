@@ -7,9 +7,12 @@ LoadAdultDataset <- function(asStrings = FALSE) {
   nas <- c(" ?", "?", "? ")
   
   if (asStrings) {
-    adult <<- read.csv("adult.data.csv", header = FALSE, stringsAsFactors = FALSE)
+    adult <<- read.csv("adult.data.csv", header = FALSE, 
+                       stringsAsFactors = FALSE,
+                       strip.white = TRUE)
   } else {
-    adult <<- read.csv("adult.data.csv", header = FALSE, na.strings = nas)
+    adult <<- read.csv("adult.data.csv", header = FALSE, na.strings = nas,
+                       strip.white = TRUE)
   }
   colnames <<- c("age",
                 "workclass",
@@ -30,9 +33,9 @@ LoadAdultDataset <- function(asStrings = FALSE) {
   
   # De teste
   if (asStrings) {
-    adult.test <<- read.csv("adult.test.csv", header = FALSE, stringsAsFactors = FALSE)
+    adult.test <<- read.csv("adult.test.csv", header = FALSE, stringsAsFactors = FALSE, strip.white = TRUE)
   } else {
-    adult.test <<- read.csv("adult.test.csv", header = FALSE, na.strings = nas)
+    adult.test <<- read.csv("adult.test.csv", header = FALSE, na.strings = nas, strip.white = TRUE)
   }
   names(adult.test) <<- colnames
   
