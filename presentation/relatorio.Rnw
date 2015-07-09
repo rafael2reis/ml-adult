@@ -31,8 +31,10 @@ Este trabalho tem como objetivo construir um classificador binário de renda par
 
 Classificadores binários são modelos clássicos de aprendizado de máquina. Um exemplo é a tarefa de classficar uma mensagem como \emph{spam} ou não-\emph{spam}. Esses problemas pertecem à categoria de aprendizado \emph{supervisionado}, que consiste em predizer, ou estimar, uma \emph{saída} baseada e uma ou mais \emph{entradas} \cite{James:2014:ISL:2517747}.
 
-\section{Base de Dados}
+Este trabalho está dividido da seguinte forma: na seção \ref{dataset}, apresentamos as características do \emph{dataset} utilizado; na seção \ref{tarefa}, descrevemos a tarefa associada; na seção \ref{preparacao}, mostramos os passos que foram seguidos na preparação do dados;  na seção \ref{classificadores}, definimos os algoritmos que obtiveram os melhores resultados e na seção \ref{inducao} descrevemos o método de indução de atributos utilizado. Por fim, na seção \ref{resultados} apresentamos os resultados e na \ref{conclusao} as conclusões.
 
+\section{Base de Dados}
+\label{dataset}
 O Adult Data Set \cite{adultwebsite} é uma base de dados do UCI Machine Learning Repository \cite{Lichman:2013}, gerada a partir de dados do censo americano de 1994. O \emph{data set} possui 14 atributos, sendo 8 categóricos e 6 numéricos, como idade, educação, estado civil, dentre outros. São disponibilizados 2 arquivos, um para o conjunto de treino (com 32.561 registros) e o outro de teste (com 16.281).
 
 Este trabalho, porém, utiliza o Adult Data Set um pouco modificado: seguindo as recomendações da página \emph{web} da base, foram removidos todos os registros que continham algum valor NA, tanto do conjunto de treino, quanto do conjunto de teste. Assim, o \emph{dataset} fica com um total de 45.222 registros, dos quais 30.162 são para treino e 15.060 para teste.
@@ -40,7 +42,7 @@ Este trabalho, porém, utiliza o Adult Data Set um pouco modificado: seguindo as
 O Adult Data Set foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
 
 \section{Tarefa}
-
+\label{tarefa}
 A tarefa associada a esta base é uma classficação binária: predizer se uma pessoa possui renda maior do que \$50K ao ano. O atributo \emph{over50K} contém essa informação: ele possui valor ``>50K'',  se a pessoa apresenta renda maior do que \$50K, ou ``<=50K'',  caso contrário.
 
 Em todo o conjunto, 75.22\% dos registros estão classificados como ``<=50K'', que será utilizado como \emph{baseline} estatístico. Junto com as melhores acurácias encontradas na literatura para esta tarefa \cite{kohavi1996scaling}, temos a seguinte tabela:
@@ -67,7 +69,7 @@ Naive Bayes & 83.88 \\
 O objetivo deste trabalho é atingir uma acurácia melhor do que as apresentadas.
 
 \section{Preparação dos Dados}
-
+\label{preparacao}
 Os arquivos com as bases de treino e de teste precisaram ser tratados antes da construção do modelo no framework Weka. Inicialmente, os registros que possuíam algum valor NA foram removidos, tanto da base de treino, quanto da de teste.
 
 Foi verificado que, em certos atributos categóricos, apareciam valores na base de teste que não existiam na base de treino. Isso impedia o carregamento do conjunto de teste para a validação no Weka. A solução encontrada foi a criação de um \emph{script} na linguagem R que convertia as bases em formato txt/csv para o formato \emph{arff}, utilizado pelo Weka.
@@ -75,6 +77,7 @@ Foi verificado que, em certos atributos categóricos, apareciam valores na base 
 Também foi necessário limpar a base de treino, que possuía um caracter ``.'' ao final de cada linha, o que alterava o valor do atributo com o valor da classificação.
 
 \section{Classificadores}
+\label{classificadores}
 
 Nesta seção, apresentamos três classificadores: NBTree, Decision Tree e Rotation Forest. O primeiro foi construídos a fim de atingir os resultados já apresentados na literatura. Os dois últimos tiveram como objetivo melhorar a maior acurácia registrada até então para o Adult Data Set. A seguir, uma descrição de cada algoritmo.
 
@@ -90,16 +93,17 @@ A Árvore de Decisão é um dos métodos mais práticos e amplamente utilizados 
 
 \subsection{Rotation Forest}
 
-Rotation Forest foi apresentado em \cite{rodriguez2006rotation}.
+Rotation Forest foi apresentado em \cite{rodriguez2006rotation}. Ele tem como objetivo a criação de diversos, mas precisos, classificadores. Ele combina subespaços randômicos e \emph{bagging} com a geração de componentes de atributos principais para construir um comitê de árvores de decisão \cite{witten2005data}.
 
 \section{Indução de Atributos}
+\label{inducao}
 
 Baseado em \cite{fernandes2012entropy}, foram gerados atributos binários para tentar melhorar a acurácia da classificação. A partir da árvore de decisão construída pelo J48 do Weka, de início, foram gerados 100 atributos binários, apenas para efeitos de teste. Depois, foram gerados 723 atributos, que correspondiam a toda a árvore. Mais tarde, tentou-se refazer a árvore, modificando-se alguns parâmetros do algoritmo, e um total de 946 atributos foram gerados.
 
 Após aplicar os algoritmos levando-se em conta as \emph{features} geradas, verificou-se que os modelos que incluíam apenas os 100 obtiveram os melhores resultados, mas não melhor do que o \emph{dataset} sem os atributos induzidos. Ao final, como será explicado a seguir, o resultado do modelo com 100 atributos gerados foi aproveitado na etapa de comitê.
 
 \section{Resultados}
-
+\label{resultados}
 Para gerar os resultados, foi utilizado o framework para aprendizado de máquina Weka. Os modelos foram construídos e validados utilizando, respectivamente, o conjunto de treino e o de teste. Foram encontrados os seguintes valores para as acurácias:
 
 \begin{table}[h!]
@@ -123,45 +127,15 @@ NBTree & 85.7105 \\
 
 A seguir, os resultados detalhados para cada algoritmo:
 
-\begin{table}[h]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
-TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
-\hline
-0.935 & 0.489 & 0.859 & 0.935 & 0.895 & 0.889 & <=50K \\
-\hline
-0.511 & 0.065 & 0.712 & 0.511 & 0.595 & 0.889 & >50K \\
-\hline
-\end{tabular}
-\caption{Resultados por Classe: NBTree}
-\label{table:1}
-\end{table}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-a & b & $\leftarrow$ classified as \\
-\hline
-11579 & 805 & a = <=50K \\
-\hline
-1905 & 1992 & b = >50K \\
-\hline
-\end{tabular}
-\caption{Matrix de Confusão NBTree}
-\label{table:2}
-\end{table}
-
 \begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-0.933 & 0.342 & 0.897 & 0.933 & 0.914 & 0.919 & <=50K \\
+0.934 & 0.362 & 0.888 & 0.934 & 0.91 & 0.911 & <=50K \\
 \hline
-0.658 & 0.067 & 0.756 & 0.658 & 0.703 & 0.919 & >50K \\
+0.638 & 0.066 & 0.759 & 0.638 & 0.693 & 0.911 & >50K \\
 \hline
 \end{tabular}
 \caption{Resultados por Classe: Rotation Forest (IA)}
@@ -174,9 +148,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
  a & b & $\leftarrow$ classified as \\
  \hline
-11555 & 829 & a = <=50K \\
+10612 & 748 & a = <=50K \\
 \hline
-1334 & 2563 & b = >50K \\
+1341 & 2359 & b = >50K \\
  \hline
 \end{tabular}
 \caption{Matrix de Confusão Rotation Forest (IA)}
@@ -189,9 +163,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-0.999 & 0.007 & 0.998 & 0.999 & 0.999 & 1 & <=50K \\
+0.936 & 0.367 & 0.887 & 0.936 & 0.911 & 0.884 & <=50K \\
 \hline
-0.993 & 0.001 & 0.998 & 0.993 & 0.995 & 1 & >50K \\
+0.633 & 0.064 & 0.764 & 0.633 & 0.692 & 0.884 & >50K \\
 \hline
 \end{tabular}
 \caption{Resultados por Classe: Decision Tree}
@@ -204,9 +178,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
  a & b & $\leftarrow$ classified as \\
  \hline
- 12376 & 8 & a = <=50K \\
+ 10635 & 725 & a = <=50K \\
  \hline
- 28 & 3869 & b = >50K \\
+ 1358 & 2342 & b = >50K \\
  \hline
 \end{tabular}
 \caption{Matrix de Confusão Decision Tree}
@@ -219,9 +193,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
 TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \hline
-1 & 0.007 & 0.998 & 1 & 0.999 & 1 & <=50K \\
+0.936 & 0.361 & 0.888 & 0.936 & 0.911 & 0.916 & <=50K \\
 \hline
-0.993 & 0 & 0.999 & 0.993 & 0.996 & 1 & >50K \\
+0.639 & 0.064 & 0.764 & 0.639 & 0.696 & 0.916 & >50K \\
 \hline
 \end{tabular}
 \caption{Resultados por Classe: Rotation Forest}
@@ -233,10 +207,10 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \begin{tabular}{|c|c|c|}
 \hline
  a & b & $\leftarrow$ classified as \\
- \hline
-12382 & 2 & a = <=50K \\
 \hline
-28 & 3869 & b = >50K \\
+10632 & 728 & a = <=50K \\
+\hline
+1337 & 2363 & b = >50K \\
  \hline
 \end{tabular}
 \caption{Matrix de Confusão Rotation Forest}
@@ -244,8 +218,9 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 \end{table}
 
 \section{Conclusão}
-
-Para a tarefa de classificação de renda do Adult Data Set, .
+\label{conclusao}
+Para a tarefa de classificação de renda do Adult Data Set, foi melhorada a acurácia das classificações de 85.90\% para 86.42\%. Os três melhores classificadores obtiveram resultados bem similares. Tudo indica que estes valores estejam próximos aos limites do \emp{dataset}.
+Como trabalho futuro, pode-se tentar explorar ainda mais a indução de atributos para esta tarefa.
 
 \printbibliography
 
