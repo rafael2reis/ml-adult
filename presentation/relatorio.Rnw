@@ -16,7 +16,7 @@ Sys.setenv(TEXINPUTS=getwd(),
 
 \title{Um Classificador de Renda\\ para o Adult Data Set}
 \author{Luis Felipe Müller \\ \texttt{lhenriques@inf.puc-rio.br}
-  \and Rafael dos Reis Silva \\ \texttt{rrsilva@inf.puc-rio.br}}
+  \and Rafael Reis \\ \texttt{rrsilva@inf.puc-rio.br}}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -24,7 +24,7 @@ Sys.setenv(TEXINPUTS=getwd(),
 \maketitle
 
 \begin{abstract}
-Este trabalho tem como objetivo construir um classificador binário de renda para o Adult Data Set, cuja acurácia seja melhor do que a maior já registrada na literatura (85.9\%). Foram gerados alguns modelos de aprendizado de máquina a partir de diferentes algoritmos. Aqueles baseados em comitês obtiveram os melhores resultados, atingindo uma acurácia de mais de 99\%.
+Este trabalho tem como objetivo construir um classificador binário de renda para o Adult Data Set, cuja acurácia seja melhor do que a maior já registrada na literatura (85.9\%). Foram gerados alguns modelos de aprendizado de máquina a partir de diferentes algoritmos. Também foi utilizado o método de indução de atributos binários. Um comitê com os resultados dos três melhores algoritmos produziu uma acurácia de 86.42\%.
 \end{abstract}
 
 \section{Introdução}
@@ -35,13 +35,15 @@ Classificadores binários são modelos clássicos de aprendizado de máquina. Um
 
 O Adult Data Set \cite{adultwebsite} é uma base de dados do UCI Machine Learning Repository \cite{Lichman:2013}, gerada a partir de dados do censo americano de 1994. O \emph{data set} possui 14 atributos, sendo 8 categóricos e 6 numéricos, como idade, educação, estado civil, dentre outros. São disponibilizados 2 arquivos, um para o conjunto de treino (com 32.561 registros) e o outro de teste (com 16.281).
 
-O \emph{data set} foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
+Este trabalho, porém, utiliza o Adult Data Set um pouco modificado: seguindo as recomendações da página \emph{web} da base, foram removidos todos os registros que continham algum valor NA, tanto do conjunto de treino, quanto do conjunto de teste. Assim, o \emph{dataset} fica com um total de 45.222 registros, dos quais 30.162 são para treino e 15.060 para teste.
+
+O Adult Data Set foi citado pela primeira vez em \cite{kohavi-nbtree} e, desde então, é utilizado, principalmente, para medir a qualidade de novos métodos de aprendizado de máquina \cite{pavlov2000scaling} \cite{cano2003using} \cite{hardt2012simple}.
 
 \section{Tarefa}
 
 A tarefa associada a esta base é uma classficação binária: predizer se uma pessoa possui renda maior do que \$50K ao ano. O atributo \emph{over50K} contém essa informação: ele possui valor ``>50K'',  se a pessoa apresenta renda maior do que \$50K, ou ``<=50K'',  caso contrário.
 
-No conjunto de treino, 76.07\% dos registros estão classificados como ``<=50K'', que será utilizado como \emph{baseline} estatístico. Junto com as melhores acurácias encontradas na literatura para esta tarefa \cite{kohavi1996scaling}, temos a seguinte tabela:
+Em todo o conjunto, 75.22\% dos registros estão classificados como ``<=50K'', que será utilizado como \emph{baseline} estatístico. Junto com as melhores acurácias encontradas na literatura para esta tarefa \cite{kohavi1996scaling}, temos a seguinte tabela:
 
 \begin{table}[h]
 \centering
@@ -66,21 +68,15 @@ O objetivo deste trabalho é atingir uma acurácia melhor do que as apresentadas
 
 \section{Preparação dos Dados}
 
-Os arquivos com as bases de treino e de teste precisaram ser tratados antes da construção do modelo no framework Weka. Foi verificado que, em certos atributos categóricos, apareciam valores na base de teste que não existiam na base de treino. Isso empedia o carregamento do conjunto de teste para a validação no Weka. A solução encontrada foi a criação de um \emph{script} na linguagem R que convertia as bases em formato txt/csv para o formato \emph{arff}, utilizado pelo Weka.
+Os arquivos com as bases de treino e de teste precisaram ser tratados antes da construção do modelo no framework Weka. Inicialmente, os registros que possuíam algum valor NA foram removidos, tanto da base de treino, quanto da de teste.
+
+Foi verificado que, em certos atributos categóricos, apareciam valores na base de teste que não existiam na base de treino. Isso impedia o carregamento do conjunto de teste para a validação no Weka. A solução encontrada foi a criação de um \emph{script} na linguagem R que convertia as bases em formato txt/csv para o formato \emph{arff}, utilizado pelo Weka.
 
 Também foi necessário limpar a base de treino, que possuía um caracter ``.'' ao final de cada linha, o que alterava o valor do atributo com o valor da classificação.
 
 \section{Classificadores}
 
-Foram utilizados cinco classificadores: Naive Bayes, NBTree, RandomTree, RandomForest e RandomCommittee. Os dois primeiros foram construídos apenas com fins ilustrativos, a fim de atingir os resultados já apresentados na literatura. Os três últimos tiveram como objetivo melhorar a maior acurácia registrada até então para o \emph{Adult Data Set}. A seguir, uma descrição de cada algoritmo.
-
-\subsection{Naive Bayes}
-
-O classificador Naive Bayes é baseado na suposição de que os valores dos atributos de entrada são condicionalmente independentes do valor da saída \cite{michalski2013machine}. A classificação é dada pela fórmula:
-
-$$v_{NB} = \text{argmax}_{v_j \in V} P(v_j) \prod_i P(a_i|v_j)$$
-
-Onde os diversos valores de $P(v_j)$ e $P(a_i|v_j)$ são estimados utilizando-se o conjunto de treino.
+Nesta seção, apresentamos três classificadores: NBTree, Decision Tree e Rotation Forest. O primeiro foi construídos a fim de atingir os resultados já apresentados na literatura. Os dois últimos tiveram como objetivo melhorar a maior acurácia registrada até então para o Adult Data Set. A seguir, uma descrição de cada algoritmo.
 
 \subsection{NBTree}
 
@@ -88,17 +84,19 @@ NBTree foi proposto em \cite{kohavi1996scaling} e é um híbrido entre as árvor
 
 Especialmente, em bases de dados maiores, os resultados do NBTree são melhores do que os das árvores de decisão e do Naive Bayes \cite{kohavi1996scaling}.
 
-\subsection{Random Tree}
+\subsection{Decision Tree}
 
-Random Tree é uma variante da árvore de decisão, na qual o particionamento de cada nó é escolhido aleatoriamente de um total de $K$ melhores particionamentos \cite{dietterich2000experimental}.
+A Árvore de Decisão é um dos métodos mais práticos e amplamente utilizados para inferência indutiva \cite{michalski2013machine}. Basicamente, o algoritmo faz uma construção \emph{top-down} da árvore, utilizando a pergunta ``qual atributo deve ser testado neste nó?''. Para responder a essa pergunta, cada atributo é avaliado utilizando um teste estatístico para determinar quão bem ele sozinho classifica os exemplos de teste. Em geral, a medida utilizada no teste é a \emph{entropia}. 
 
-\subsection{Random Forest}
+\subsection{Rotation Forest}
 
-Random Forest foi apresentado em \cite{breiman2001random}. O método consiste na geração de várias árvores de decisão e a classificação é dada pela resposta mais votada. A construção das árvores possui uma particularidade: para um conjunto de $p$ atributos, a cada particionamento, são considerados apenas $m$ atributos aleatórios possíveis, onde $m \approx \sqrt{p}$.
+Rotation Forest foi apresentado em \cite{rodriguez2006rotation}.
 
-\subsection{Random Committee}
+\section{Indução de Atributos}
 
-A ideia do Ramdom Committee é bastante simples: ele constrói um comitê de classificadores base e calcula a média das suas predições. Cada classificador é baseado no mesmo conjunto de dados, mas utiliza uma semente diferente para a geração de números aleatórios. Isso só faz sentido quando o classificador base é de natureza aleatória \cite{witten2005data}. Neste trabalho, o classificador base utilizado foi o Random Tree.
+Baseado em \cite{fernandes2012entropy}, foram gerados atributos binários para tentar melhorar a acurácia da classificação. A partir da árvore de decisão construída pelo J48 do Weka, de início, foram gerados 100 atributos binários, apenas para efeitos de teste. Depois, foram gerados 723 atributos, que correspondiam a toda a árvore. Mais tarde, tentou-se refazer a árvore, modificando-se alguns parâmetros do algoritmo, e um total de 946 atributos foram gerados.
+
+Após aplicar os algoritmos levando-se em conta as \emph{features} geradas, verificou-se que os modelos que incluíam apenas os 100 obtiveram os melhores resultados, mas não melhor do que o \emph{dataset} sem os atributos induzidos. Ao final, como será explicado a seguir, o resultado do modelo com 100 atributos gerados foi aproveitado na etapa de comitê.
 
 \section{Resultados}
 
@@ -110,15 +108,13 @@ Para gerar os resultados, foi utilizado o framework para aprendizado de máquina
 \hline
  Algo & Acurácia(\%) \\
 \hline
-Naive Bayes & 83.3548 \\
+Rotation Forest & 86.2882 \\
 \hline
-NBTree & 86.7146 \\
+Decision Tree & 86.1687 \\
 \hline
-Random Tree & 99.7789 \\
+Rotation Forest(IA) & 86.1288 \\
 \hline
-Random Forest & 99.8157 \\
-\hline
-Random Committee & 99.9447 \\
+NBTree & 85.7105 \\
  \hline
 \end{tabular}
 \caption{Acurácias}
@@ -138,7 +134,7 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 0.511 & 0.065 & 0.712 & 0.511 & 0.595 & 0.889 & >50K \\
 \hline
 \end{tabular}
-\caption{Resultados por Classe: Naive Bayes}
+\caption{Resultados por Classe: NBTree}
 \label{table:1}
 \end{table}
 
@@ -153,7 +149,7 @@ a & b & $\leftarrow$ classified as \\
 1905 & 1992 & b = >50K \\
 \hline
 \end{tabular}
-\caption{Matrix de Confusão Naive Bayes}
+\caption{Matrix de Confusão NBTree}
 \label{table:2}
 \end{table}
 
@@ -168,7 +164,7 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 0.658 & 0.067 & 0.756 & 0.658 & 0.703 & 0.919 & >50K \\
 \hline
 \end{tabular}
-\caption{Resultados por Classe: NBTree}
+\caption{Resultados por Classe: Rotation Forest (IA)}
 \label{table:3}
 \end{table}
 
@@ -183,7 +179,7 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 1334 & 2563 & b = >50K \\
  \hline
 \end{tabular}
-\caption{Matrix de Confusão NBTree}
+\caption{Matrix de Confusão Rotation Forest (IA)}
 \label{table:4}
 \end{table}
 
@@ -198,7 +194,7 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 0.993 & 0.001 & 0.998 & 0.993 & 0.995 & 1 & >50K \\
 \hline
 \end{tabular}
-\caption{Resultados por Classe: Random Tree}
+\caption{Resultados por Classe: Decision Tree}
 \label{table:5}
 \end{table}
 
@@ -213,7 +209,7 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
  28 & 3869 & b = >50K \\
  \hline
 \end{tabular}
-\caption{Matrix de Confusão Random Tree}
+\caption{Matrix de Confusão Decision Tree}
 \label{table:6}
 \end{table}
 
@@ -228,7 +224,7 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 0.993 & 0 & 0.999 & 0.993 & 0.996 & 1 & >50K \\
 \hline
 \end{tabular}
-\caption{Resultados por Classe: Random Forest}
+\caption{Resultados por Classe: Rotation Forest}
 \label{table:7}
 \end{table}
 
@@ -243,43 +239,13 @@ TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
 28 & 3869 & b = >50K \\
  \hline
 \end{tabular}
-\caption{Matrix de Confusão Random Forest}
+\caption{Matrix de Confusão Rotation Forest}
 \label{table:8}
-\end{table}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
-TP Rate & FP Rate & Precision & Recall & F-Measure & ROC Area & Class \\
-\hline
-1 & 0.002 & 0.999 & 1 & 1 & 1 & <=50K \\
-\hline
-0.998 & 0 & 1 & 0.998 & 0.999 & 1 & >50K \\
-\hline
-\end{tabular}
-\caption{Resultados por Classe: Random Committee}
-\label{table:9}
-\end{table}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-a & b & $\leftarrow$ classified as \\
-\hline
-12384 & 0 & a = <=50K \\
-\hline
-9 & 3888 & b = >50K \\
-\hline
-\end{tabular}
-\caption{Matrix de Confusão Random Committee}
-\label{table:10}
 \end{table}
 
 \section{Conclusão}
 
-Para a tarefa de classificação de renda do Adult Data Set, os modelos baseados em Random Tree, Random Forest ou Random Committee obtiveram resultados excepcionais, bem acima dos já registrados na literatura.
+Para a tarefa de classificação de renda do Adult Data Set, .
 
 \printbibliography
 
